@@ -120,7 +120,7 @@ export default class Review extends React.Component {
                     <h5 className={styles.review_postdate}>{this.state.date}</h5>
                     <p className={styles.review_description}>{this.state.reviewDescription}</p>
                     {/* Rendering Photos */}
-                    <ul>
+                    <ul style={{'padding': '0px'}}>
                         {
                             this.state.photos.length === 1?
                             <ul className={styles.single_photo_container}>

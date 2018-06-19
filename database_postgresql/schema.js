@@ -73,15 +73,27 @@ const photos = connection.define('photos', {
     }
 }, { timestamps: false }) 
 
-connection.sync({force: false})
+users.sync({force: true})
     .then(() => {
-    // users.bulkCreate(user_seeds);
-    // photos.bulkCreate(photo_seeds);
-    // restaurants.bulkCreate(restaurant_seeds);
-    // reviews.bulkCreate(review_seeds);
-    console.log('successfully synced database')
+        users.bulkCreate(user_seeds);
     })
-    .catch(err => console.log('error syncing to database', err));
+    .catch(err => console.log('error loading data', err));
+
+photos.sync({force: true})
+    .then(() => {
+        photos.bulkCreate(photo_seeds);
+    })
+    .catch(err => console.log('error loading data', err));
+restaurants.sync({force: true})
+    .then(() => {
+        restaurants.bulkCreate(restaurant_seeds);
+    })
+    .catch(err => console.log('error loading data', err));
+reviews.sync({force: true})
+    .then(() => {
+        reviews.bulkCreate(review_seeds);
+    })
+    .catch(err => console.log('error loading data', err));
 
 module.exports = {
     reviews: reviews,

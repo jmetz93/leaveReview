@@ -22,6 +22,8 @@
     float: left;
     margin: 0 10px 0 10px;
     list-style-type: none;
+    padding: 0;
+    -webkit-padding-start: 0px;
 }
 
 :local(.profile_username) {
@@ -85,6 +87,8 @@
     width: 220px;
     height: 125px;
     float: left;
+    padding: 0px;
+    -webkit-padding-start: 0px;
 }
 
 :local(.passport_option_container) {
@@ -92,6 +96,8 @@
     height: 25px;
     /* border-bottom: 1px solid lightgrey; */
     list-style-type: none;
+    padding: 0px;
+    -webkit-padding-start: 0px;
 }
 
 :local(.passport_option_text) {
@@ -128,6 +134,8 @@
     float: right;
     margin-top: 3px;
     margin-right: 190px;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
 }
 
 :local(.rating_photo) {
@@ -148,6 +156,8 @@
     margin-top: 20px;
     list-style-type: none;
     border-radius: 5px;
+    padding: 0;
+    -webkit-padding-start: 0px;
 }
 
 :local(.duplex_photo_container) {
@@ -156,6 +166,8 @@
     margin-top: 20px;
     list-style-type: none;
     border-radius: 5px;
+    padding: 0;
+    -webkit-padding-start: 0px;
 }
 
 :local(.triple_photo_container) {
@@ -164,6 +176,8 @@
     margin-top: 20px;
     list-style-type: none;
     border-radius: 5px;
+    padding: 0;
+    -webkit-padding-start: 0px;
 }
 
 :local(.single_photo) {
@@ -172,6 +186,8 @@
     background: #fff;
     float: left;
     border-radius: 5px;
+    padding: 0;
+    -webkit-padding-start: 0px;
 }
 
 :local(.duplex_photo_left) {
@@ -181,6 +197,8 @@
     margin-right: 5px;
     background: #fff;
     border-radius: 5px;
+    padding: 0;
+    -webkit-padding-start: 0px;
 }
 :local(.duplex_photo_right) {
     height: 170px;
@@ -189,12 +207,16 @@
     margin-left: 5px;
     background: #fff;
     border-radius: 5px;
+    padding: 0;
+    -webkit-padding-start: 0px;
 }
 
 :local(.voting_buttons_container) {
     width: 300px;
     height: 30px;
     margin-top: 40px;
+    padding: 0px;
+    -webkit-margin-after: 0;
 }
 
 :local(.vote_item_0) {
@@ -294,6 +316,8 @@
     color: #41a700;
     position: relative;
     bottom: 50px;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
 }
 
 :local(.user_votedOff) {
@@ -301,4 +325,6 @@
     color: #fff;
     position: relative;
     bottom: 50px;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
 }

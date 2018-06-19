@@ -1,0 +1,24 @@
+version: '3'
+services:
+    db:
+        image: postgres
+        ports:
+          - "5432:5432" 
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
+    api:
+        build: .
+        command: bash -c "npm start && npm run build:db"
+        image: jj/node-web-app
+        ports:
+          - "3000:3000"
+        volumes:
+          - .:/app
+        depends_on:
+          - db
+        environment:
+          DATABASE_URL: postgres://postgres@db
+
+# Change port to 80:3000 on API ports
+# Remake image

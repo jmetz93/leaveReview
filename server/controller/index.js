@@ -51,7 +51,6 @@ const restaurant_controllers = {
     get: function(req, res) {
         restaurants.findAll({})
         .then(data => {
-            console.log('restaurant data received')
             res.status(200).send(data)
         })
         .catch(err => {
@@ -83,19 +82,9 @@ const review_controllers = {
         })
     },
     post: function(req, res) {
-        console.log('posting')
-        console.log(req.body.restaurantID)
-        console.log(req.body.reviewDescription)
-        console.log(req.body.date)
-        console.log(req.body.counts)
-        console.log(req.body.rating)
-        console.log(req.body.user_id)
-        let x = req.body.restaurantID
         let newReview = {'date': req.body.date, 'counts': req.body.counts, 'rating': req.body.rating, 'user_id': req.body.user_id, 'restaurant_id': req.body.restaurantID, 'description': req.body.reviewDescription}
-        //  restaurant_id': req.body.restaurantID, 'description': req.body.reviewDescription}
-        console.log(newReview)
         reviews.insertOrUpdate(newReview);
-        res.send('applied')
+        res.status(201).send('applied')
     }
 }
 

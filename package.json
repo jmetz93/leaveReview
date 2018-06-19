@@ -1,10 +1,10 @@
 {
-  "name": "Yelp-Review-Component",
+  "name": "yelp-review-component",
   "version": "1.0.0",
   "description": "This is a component that renders reviews from a postgre-sql database with mock reviews in. Designed to be a clone of Yelp's reviews microservice.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --watch --coverage",
     "start": "nodemon server/index.js",
     "build": "webpack -w"
   },
@@ -26,22 +26,36 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
     "css-loader": "^0.28.11",
     "express": "^4.16.3",
     "file-loader": "^1.1.11",
     "font-awesome": "^4.7.0",
     "image-loader": "0.0.1",
     "image-webpack-loader": "^4.3.0",
+    "jest-enzyme": "^6.0.1",
     "nodemon": "^1.17.5",
     "pg": "^7.4.3",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
+    "react-test-renderer": "^16.4.0",
     "request-promise": "^4.2.2",
     "sequelize": "^4.37.10",
     "webpack": "^4.10.2",
     "webpack-cli": "^2.1.4"
   },
   "devDependencies": {
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "jest": "^23.1.0",
     "style-loader": "^0.21.0"
+  },
+  "jest": {
+    "setupTestFrameworkScriptFile": "./node_modules/jest-enzyme/lib/index.js",
+    "unmockedModulePathPatterns": [
+      "react",
+      "enzyme",
+      "jest-enzyme"
+    ]
   }
 }

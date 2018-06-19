@@ -14,12 +14,12 @@ export default class Header extends React.Component {
         return (
             <div id="Header">
                 <h2 className={styles.headertext}> <span className={styles.highlight}>Recommended Reviews</span> for {this.state.RestaurantName}</h2>
-                <span>
+                <ul className={styles.search_bar}>
                     <input className={styles.inputbox} placeholder="Search within the reviews" />
                     <button type="submit" value="submit" className={styles.btn}>
                         < SearchIcon/>
                     </button>
-                </span> 
+                </ul> 
             </div>
         )
     }

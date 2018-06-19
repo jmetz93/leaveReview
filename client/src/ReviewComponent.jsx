@@ -22,7 +22,8 @@ export default class ReviewComponent extends React.Component {
         let reviews = [];
         let restaurantName = ''
         let restaurantID = 0
-        axios.get('/api/restaurants')
+        //http://35.174.116.97:3000/api/restaurants
+        axios.get('http://35.174.116.97:3000/api/restaurants')
             .then(({data}) => {
                 let n = Math.floor(Math.random() * Math.floor(8))
                 this.setState({
@@ -34,9 +35,10 @@ export default class ReviewComponent extends React.Component {
     }
 
     loadReviews() {
-        axios.get('api/reviews', {
+        console.log('reloading reviews')
+        axios.get('http://35.174.116.97:3000/api/reviews', {
             headers: {'restaurant_id': this.state.RestaurantID}
-        }) 
+        })
         .then(({data}) => {
             let reviews = [];
             data.forEach(review => {
@@ -56,7 +58,7 @@ export default class ReviewComponent extends React.Component {
                     rating: review.rating,
                     photos: null
                 }
-                axios.get('api/users', {
+                axios.get('http://35.174.116.97:3000/api/users', {
                     headers: {'user_id': review.user_id}
                 })
                 .then(({data}) => {
@@ -67,7 +69,7 @@ export default class ReviewComponent extends React.Component {
                     newReview.reviews_count = user_counts[1]
                     newReview.photos_count = user_counts[2]
                     newReview.img_src = data[0].profilephoto
-                    axios.get('api/photos', {
+                    axios.get('http://35.174.116.97:3000/api/photos', {
                         headers: {'review_id': review.id}
                     })
                     .then(({data}) => {
@@ -120,7 +122,7 @@ export default class ReviewComponent extends React.Component {
                 < Review rating={review.rating} photos={review.photos} username={review.username} location={review.location} date={review.date} friends_count={review.friends_count} reviews_count={review.reviews_count} photos_count={review.photos_count} useful_count={review.useful_count} funny_count={review.funny_count} cool_count={review.cool_count} reviewDescription={review.reviewDescription} imgSrc={review.img_src} key={Math.random()*Math.random(1)}/>
                 ))
                 }
-                { this.state.writeReview? < WriteReview  toggledRating={this.state.toggledRating} writeReviewToggleOff={this.writeReviewToggleOff.bind(this)} RestaurantID={this.state.RestaurantID} RestaurantName={this.state.RestaurantName}/> : null }
+                { this.state.writeReview? < WriteReview  toggledRating={this.state.toggledRating} loadReviews={this.loadReviews.bind(this)} writeReviewToggleOff={this.writeReviewToggleOff.bind(this)} RestaurantID={this.state.RestaurantID} RestaurantName={this.state.RestaurantName}/> : null }
             </div>
         )
     }

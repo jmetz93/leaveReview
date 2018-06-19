@@ -60,11 +60,13 @@
     color: #0073bb;
     font-size: 28px;
     font-weight: bold;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
 }
 
 :local(.form_input_container) {
-    width: 90%;
-    /* height: 50%; */
+    width: 360px;
+    height: 347px;
     margin-left: 5%;
     border: 1px solid lightgrey;
     border-radius: 4px;
@@ -99,32 +101,30 @@
     -moz-user-select: none;
 }
 
-
-
-
-
-
-
+:local(.widget_and_text_container) {
+    width: 340px;
+    height: 30px;
+    margin-left: 10px;
+}
 /* Starboard widget */
-:local(.widgetcontainer) {
-    width: 360px;
+/* :local(.widgetcontainer) {
+
     height: 23px;
     margin: 10px 10px 12px 10px;
-}
+} */
 
 :local(.widgetboard) {
     width: 162px;    
     height: 30px;
-    padding: 0 99px 0 0px;
+    float: left;
+    padding: 0px;
+    -webkit-padding-start: 0px;
 }
 
 :local(.widget_text) {
-    width: 220px;
-    height: 20px;
-    margin-left: 165px;
-    bottom: 20px;
-    float: left;
-    position: relative;
+    width: 168px;
+    height: 30px;
+    float: right;
 }
 
 :local(.form_input_field) {

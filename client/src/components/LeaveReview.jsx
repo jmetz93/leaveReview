@@ -23,7 +23,7 @@ export default class LeaveReview extends React.Component {
         return (
             <li className={styles.container}>
                 <div className={styles.profilephoto}>
-                    <img src={EmptyProfile} width="148" height="68"/>
+                    <img src={"https://s3.us-east-2.amazonaws.com/review-component/photos/emptyprofile.png"} width="148" height="68"/>
                 </div>
                 <div className={styles.starboard}>
                     <div className={styles.widgetcontainer}>
