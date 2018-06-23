@@ -23,7 +23,7 @@ export default class ReviewComponent extends React.Component {
         let restaurantName = ''
         let restaurantID = 0
         //http://35.174.116.97:3000/api/restaurants
-        axios.get('http://35.174.116.97:3000/api/restaurants')
+        axios.get('/api/restaurants')
             .then(({data}) => {
                 let n = Math.floor(Math.random() * Math.floor(8))
                 this.setState({
@@ -36,7 +36,7 @@ export default class ReviewComponent extends React.Component {
 
     loadReviews() {
         console.log('reloading reviews')
-        axios.get('http://35.174.116.97:3000/api/reviews', {
+        axios.get('/api/reviews', {
             headers: {'restaurant_id': this.state.RestaurantID}
         })
         .then(({data}) => {
@@ -58,7 +58,7 @@ export default class ReviewComponent extends React.Component {
                     rating: review.rating,
                     photos: null
                 }
-                axios.get('http://35.174.116.97:3000/api/users', {
+                axios.get('/api/users', {
                     headers: {'user_id': review.user_id}
                 })
                 .then(({data}) => {
@@ -69,7 +69,7 @@ export default class ReviewComponent extends React.Component {
                     newReview.reviews_count = user_counts[1]
                     newReview.photos_count = user_counts[2]
                     newReview.img_src = data[0].profilephoto
-                    axios.get('http://35.174.116.97:3000/api/photos', {
+                    axios.get('/api/photos', {
                         headers: {'review_id': review.id}
                     })
                     .then(({data}) => {

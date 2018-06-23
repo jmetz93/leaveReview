@@ -29,7 +29,7 @@ export default class WriteReview extends React.Component {
 
     postReview() {
         console.log(this.state.ReviewDescription)
-        axios.post('http://35.174.116.97:3000/api/reviews', 
+        axios.post('/api/reviews', 
             {reviewDescription: this.state.ReviewDescription, restaurantID: this.state.RestaurantID, 'rating': this.state.Rating, 'user_id': Math.floor(Math.random() * Math.floor(22))+1, 'counts': '0,0,0', 'date': '0'+String(Math.floor(Math.random()*Math.floor(8))+1)+'/'+String(Math.floor(Math.random()*Math.floor(30))+1)+'/2018'}
         )
         .then(

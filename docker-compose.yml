@@ -10,7 +10,7 @@ services:
     api:
         build: .
         command: bash -c "npm start && npm run build:db"
-        image: jj/node-web-app
+        image: /node-web-app
         ports:
           - "3000:3000"
         volumes:

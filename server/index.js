@@ -13,7 +13,7 @@ App.use(parser.urlencoded({extended: true}));
 App.use(cors());
 
 App.use(express.static(path.join(__dirname, '../client/dist/')))
-App.use('/api', router)
+App.use('/api', router);
 
 App.listen(PORT, err => {
     err? console.log('Failed to start server: ', err) : console.log('Listening on port ', PORT)
