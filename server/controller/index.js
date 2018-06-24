@@ -5,19 +5,22 @@ const user_controllers = {
   get: function(req, res) {
     client.query(`SELECT * FROM users WHERE users.id = ($1)` , [req.headers.id], (err, data) => {
       if (err) {
+        res.status(400);
         console.log('Error getting users= ', err);
       } else {
         res.status(200).send(data);
       }
     })
   },
+  //Post is not working yet
   post: function(req, res) {
     console.log('Request= ', req.headers)
-    client.query(`INSERT INTO users (username, profilephoto, counts, city) VALUES ($1, $2, $3, $4)`, [req.headers.username, req.headers.profilephoto, req.headers.counts, req.headers.city], (err, users) => {
+    client.query(`INSERT INTO users (username, profilephoto, counts, city) VALUES ($1, $2, $3, $4)`, [req.headers.username, req.headers.profilephoto, req.headers.counts, req.headers.city], (err, data) => {
       if (err) {
+        res.status(400);
         console.log('Error creating user= ', err);
       } else {
-        res.status(201);
+        res.status(201).send({});
       }
     })
   }
@@ -27,16 +30,18 @@ const photo_controllers = {
   get: function(req, res) {
     client.query(`SELECT * FROM photos WHERE photos.review_id = ($1)`, [req.headers.review_id], (err, data) => {
       if (err) {
+        res.status(400);
         console.log('Error getting photos= ', err);
       } else {
         res.status(200).send(data);
       }
     })
   },
-
+  //Not working 
   post: function(req, res) {
     client.query(`INSERT INTO photos (source, review_id, restaurant_id) VALUES ($1, $2, $3)`, [req.headers.source, req.headers.review_id, req.headers.restaurant_id], (err, data) => {
       if (err) {
+        res.statsu(400);
         console.log('Error creating photo= ', err);
       } else {
         res.status(201);
@@ -47,15 +52,16 @@ const photo_controllers = {
 
 const restaurant_controllers = {
   get: function(req, res) {
-    client.query('SELECT * FROM restaurants', [], (err, data) => {
+    client.query(`SELECT * FROM restaurants WHERE restaurants.id = ($1)`, [req.headers.id], (err, data) => {
       if (err) {
+        res.status(400);
         console.log('Error getting restaurants= ', err);
       } else {
         res.status(200).send(data);
       }
     })
   },
-
+  //Not working
   post: function(req, res) {
     client.query(`INSERT INTO restaurants (restaurant_name) VALUES ($1)`, [req.headers.restaurant_name], (err, data) => {
       if (err) {
@@ -77,7 +83,7 @@ const review_controllers = {
       }
     })
   },
-
+  //Not working 
   post: function(req, res) {
     client.query(`INSERT INTO reviews (timeposted, counts, ratings, user_id, restaurant_id, review) VALUES ($1)`, [req.headers.timeposted, req.headers.counts, req.headers.ratings, req.headers.user_id, req.headers.restaurant_id, req.headers.review], (err, data) => {
       if (err) {

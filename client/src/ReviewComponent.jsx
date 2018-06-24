@@ -23,12 +23,13 @@ export default class ReviewComponent extends React.Component {
         let restaurantName = ''
         let restaurantID = 0
         //http://35.174.116.97:3000/api/restaurants
-        axios.get('/api/restaurants')
+        axios.get('/api/restaurants', {
+            headers: {'id': Math.floor(Math.random() * 1000)}
+        })
             .then(({data}) => {
-                let n = Math.floor(Math.random() * Math.floor(8))
                 this.setState({
-                    RestaurantName: data[n].name,
-                    RestaurantID: data[n].id,
+                    RestaurantName: data.name,
+                    RestaurantID: data.id,
                 })
                 this.loadReviews();
             });

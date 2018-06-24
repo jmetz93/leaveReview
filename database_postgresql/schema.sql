@@ -21,16 +21,16 @@ create table reviews (
   timeposted varchar(256),
   counts varchar(256),
   ratings int,
-  user_id int references users(id),
-  restaurant_id int references restaurants(id),
+  user_id int,
+  restaurant_id int,
   review text
 );
 
 create table photos (
   id serial primary key,
   source varchar(256),
-  review_id int references reviews(id),
-  restaurant_id int references restaurants(id) 
+  review_id int,
+  restaurant_id int
 );
 
 
