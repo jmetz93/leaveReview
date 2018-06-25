@@ -18,6 +18,8 @@ module.exports = {
   client
 };
 
+
+
 // const Sequelize = require('sequelize');
 
 // const connection = new Sequelize('postgres','postgres','', {
