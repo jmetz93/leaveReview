@@ -28,8 +28,8 @@ export default class ReviewComponent extends React.Component {
         })
             .then(({data}) => {
                 this.setState({
-                    RestaurantName: data.name,
-                    RestaurantID: data.id,
+                    RestaurantID: data.rows[0].id,
+                    RestaurantName: data.rows[0].restaurantname,
                 })
                 this.loadReviews();
             });
@@ -37,17 +37,18 @@ export default class ReviewComponent extends React.Component {
 
     loadReviews() {
         console.log('reloading reviews')
+        console.log('restId= ', this.state.RestaurantID)
         axios.get('/api/reviews', {
             headers: {'restaurant_id': this.state.RestaurantID}
         })
         .then(({data}) => {
             let reviews = [];
-            data.forEach(review => {
+            data.rows.forEach(review => {
                 let counts = review.counts.split(',');
                 let newReview = {
                     username: null,
                     location: null,
-                    date: review.date,
+                    date: review.timeposted,
                     friends_count: null,
                     reviews_count: null,
                     photos_count: null,
@@ -59,16 +60,18 @@ export default class ReviewComponent extends React.Component {
                     rating: review.rating,
                     photos: null
                 }
+                console.log('id= ', review.user_id);
                 axios.get('/api/users', {
                     headers: {'user_id': review.user_id}
                 })
                 .then(({data}) => {
+                    console.log('User data= ', data)
                     let user_counts = data[0].counts.split(',');
-                    newReview.username = data[0].name
+                    newReview.username = data[0].username
                     newReview.location = data[0].location
-                    newReview.friends_count = user_counts[0]
-                    newReview.reviews_count = user_counts[1]
-                    newReview.photos_count = user_counts[2]
+                    newReview.friends_count = counts[0]
+                    newReview.reviews_count = counts[1]
+                    newReview.photos_count = counts[2]
                     newReview.img_src = data[0].profilephoto
                     axios.get('/api/photos', {
                         headers: {'review_id': review.id}
@@ -79,7 +82,6 @@ export default class ReviewComponent extends React.Component {
                             new_album.push(photo.src)
                         })
                         newReview.photos = new_album
-
                         reviews.push(newReview);
                         this.setState({
                             reviews: reviews,

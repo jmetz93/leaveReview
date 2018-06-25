@@ -18,10 +18,6 @@ module.exports = {
   client
 };
 
-// COPY users FROM '/Users/jacobmetzinger/Desktop/SDC/generate-reviews/users.txt'; 
-// COPY restaurants FROM '/Users/jacobmetzinger/Desktop/SDC/generate-reviews/restaurants.txt';
-// COPY reviews FROM '/Users/jacobmetzinger/Desktop/SDC/generate-reviews/reviews.txt';
-// COPY photos FROM '/Users/jacobmetzinger/Desktop/SDC/generate-reviews/photos.txt';
 // const Sequelize = require('sequelize');
 
 // const connection = new Sequelize('postgres','postgres','', {

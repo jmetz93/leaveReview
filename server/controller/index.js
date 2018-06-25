@@ -1,4 +1,3 @@
-const pg = require('pg');
 const { client } = require('../../database_postgresql/index');
 
 const user_controllers = {
@@ -12,15 +11,36 @@ const user_controllers = {
       }
     })
   },
-  //Post is not working yet
+  
   post: function(req, res) {
-    console.log('Request= ', req.headers)
     client.query(`INSERT INTO users (username, profilephoto, counts, city) VALUES ($1, $2, $3, $4)`, [req.headers.username, req.headers.profilephoto, req.headers.counts, req.headers.city], (err, data) => {
       if (err) {
         res.status(400);
         console.log('Error creating user= ', err);
       } else {
         res.status(201).send({});
+      }
+    })
+  },
+
+  put: function(req, res) {
+    client.query(`UPDATE users SET username = $2, profilephoto = $3, counts = $4, city = $5 WHERE  username = $1`, [req.headers.oldname, req.headers.username, req.headers.profilephoto, req.headers.counts, req.headers.city], (err, data) => {
+      if (err) {
+        res.status(400);
+        console.log('Error, updating user', err);
+      } else {
+        res.status(200).send({});
+      }
+    })
+  },
+
+  delete: function(req, res) {
+    client.query(`DELETE FROM users WHERE users.username = ($1)`, [req.headers.username], (err, data) => {
+      if (err) {
+        res.status(400);
+        console.log('Error deleting user', err);
+      } else {
+        res.status(200).send({});
       }
     })
   }
@@ -37,14 +57,36 @@ const photo_controllers = {
       }
     })
   },
-  //Not working 
+
   post: function(req, res) {
     client.query(`INSERT INTO photos (source, review_id, restaurant_id) VALUES ($1, $2, $3)`, [req.headers.source, req.headers.review_id, req.headers.restaurant_id], (err, data) => {
       if (err) {
-        res.statsu(400);
+        res.status(400);
         console.log('Error creating photo= ', err);
       } else {
-        res.status(201);
+        res.status(201).send({});
+      }
+    })
+  },
+
+  put: function(req, res) {
+    client.query(`UPDATE photos SET source = $2, review_id = $3, restaurant_id = $4 WHERE  id = $1`, [req.headers.id, req.headers.source, req.headers.review_id, req.headers.reviews_id], (err, data) => {
+      if (err) {
+        res.status(400);
+        console.log('Error, updating user', err);
+      } else {
+        res.status(200).send({});
+      }
+    })
+  },
+
+  delete: function(req, res) {
+    client.query(`DELETE FROM photos WHERE photos.id = ($1)`, [req.headers.id], (err, data) => {
+      if (err) {
+        res.status(400);
+        console.log('Error deleting user', err);
+      } else {
+        res.status(200).send({});
       }
     })
   }
@@ -61,13 +103,35 @@ const restaurant_controllers = {
       }
     })
   },
-  //Not working
+  
   post: function(req, res) {
     client.query(`INSERT INTO restaurants (restaurant_name) VALUES ($1)`, [req.headers.restaurant_name], (err, data) => {
       if (err) {
         console.log('Error creating restaurant= ', err);
       } else {
         res.status(201);
+      }
+    })
+  },
+
+  put: function(req, res) {
+    client.query(`UPDATE restaurant SET restaurantname = $2 WHERE  restaurantname = $1`, [req.headers.oldname, req.headers.restaurantname], (err, data) => {
+      if (err) {
+        res.status(400);
+        console.log('Error, updating user', err);
+      } else {
+        res.status(200).send({});
+      }
+    })
+  },
+
+  delete: function(req, res) {
+    client.query(`DELETE FROM restaurants WHERE restaurants.restaurantname = ($1)`, [req.headers.restaurantname], (err, data) => {
+      if (err) {
+        res.status(400);
+        console.log('Error deleting user', err);
+      } else {
+        res.status(200).send({});
       }
     })
   }
@@ -83,13 +147,35 @@ const review_controllers = {
       }
     })
   },
-  //Not working 
+  
   post: function(req, res) {
     client.query(`INSERT INTO reviews (timeposted, counts, ratings, user_id, restaurant_id, review) VALUES ($1)`, [req.headers.timeposted, req.headers.counts, req.headers.ratings, req.headers.user_id, req.headers.restaurant_id, req.headers.review], (err, data) => {
       if (err) {
         console.log('Error creating user= ', err);
       } else {
         res.status(201);
+      }
+    })
+  },
+
+  put: function(req, res) {
+    client.query(`UPDATE reviews SET timeposted = $2, counts = $3, ratings = $4, user_id = $5, restaurant_id = $6, review = $7 WHERE  id = $1`, [req.headers.id, req.headers.timeposted, req.headers.counts, req.headers.ratings, req.headers.user_id, req.headers.restaurant_id, req.headers.review], (err, data) => {
+      if (err) {
+        res.status(400);
+        console.log('Error, updating user', err);
+      } else {
+        res.status(200).send({});
+      }
+    })
+  },
+
+  delete: function(req, res) {
+    client.query(`DELETE FROM reviews WHERE reviews.id = ($1)`, [req.headers.id], (err, data) => {
+      if (err) {
+        res.status(400);
+        console.log('Error deleting user', err);
+      } else {
+        res.status(200).send({});
       }
     })
   }
