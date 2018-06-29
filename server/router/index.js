@@ -1,9 +1,14 @@
 const router = require('express').Router();
 
-const { user_controllers } = require('../controller/postgreSQL/index');
-const { photo_controllers } = require('../controller/postgreSQL/index');
-const { restaurant_controllers } = require('../controller/postgreSQL/index');
-const { review_controllers } = require('../controller/postgreSQL/index');
+const { user_controllers } = require('../controller/postgreSQL/index.js');
+const { photo_controllers } = require('../controller/postgreSQL/index.js');
+const { restaurant_controllers } = require('../controller/postgreSQL/index.js');
+const { review_controllers } = require('../controller/postgreSQL/index.js');
+
+// const { user_controllers } = require('../controller/mongo/index');
+// const { photo_controllers } = require('../controller/mongo/index');
+// const { restaurant_controllers } = require('../controller/mongo/index');
+// const { review_controllers } = require('../controller/mongo/index');
 
 
 router.route('/users')

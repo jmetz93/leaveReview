@@ -24,12 +24,12 @@ export default class ReviewComponent extends React.Component {
         let restaurantID = 0
         //http://35.174.116.97:3000/api/restaurants
         axios.get('/api/restaurants', {
-            headers: {'id': Math.floor(Math.random() * 1000)}
+            headers: {'id': Math.ceil(Math.random() * 10)}
         })
             .then(({data}) => {
                 this.setState({
-                    RestaurantID: data.rows[0].id,
-                    RestaurantName: data.rows[0].restaurantname,
+                    RestaurantID: data[0].id,
+                    RestaurantName: data[0].restaurantname,
                 })
                 this.loadReviews();
             });
@@ -42,54 +42,64 @@ export default class ReviewComponent extends React.Component {
             headers: {'restaurant_id': this.state.RestaurantID}
         })
         .then(({data}) => {
+            console.log('reviews data= ', data)
             let reviews = [];
-            data.rows.forEach(review => {
-                let counts = review.counts.split(',');
-                let newReview = {
-                    username: null,
-                    location: null,
-                    date: review.timeposted,
-                    friends_count: null,
-                    reviews_count: null,
-                    photos_count: null,
-                    useful_count: Number(counts[0]),
-                    funny_count: Number(counts[1]),
-                    cool_count: Number(counts[2]),
-                    reviewDescription: review.description,
-                    img_src: null,
-                    rating: review.rating,
-                    photos: null
-                }
-                console.log('id= ', review.user_id);
-                axios.get('/api/users', {
-                    headers: {'user_id': review.user_id}
-                })
-                .then(({data}) => {
-                    console.log('User data= ', data)
-                    let user_counts = data[0].counts.split(',');
-                    newReview.username = data[0].username
-                    newReview.location = data[0].location
-                    newReview.friends_count = counts[0]
-                    newReview.reviews_count = counts[1]
-                    newReview.photos_count = counts[2]
-                    newReview.img_src = data[0].profilephoto
-                    axios.get('/api/photos', {
-                        headers: {'review_id': review.id}
+            if (data.length > 0) {
+                data.forEach(review => {
+                    let counts = review.counts.split(',');
+                    let newReview = {
+                        username: null,
+                        location: null,
+                        date: review.timeposted,
+                        friends_count: null,
+                        reviews_count: null,
+                        photos_count: null,
+                        useful_count: Number(counts[0]),
+                        funny_count: Number(counts[1]),
+                        cool_count: Number(counts[2]),
+                        reviewDescription: review.review,
+                        img_src: null,
+                        rating: review.rating,
+                        photos: null
+                    }
+                    console.log('id= ', review.user_id);
+                    axios.get('/api/users', {
+                        headers: {'user_id': review.user_id}
                     })
                     .then(({data}) => {
-                        let new_album = [];
-                        data.forEach(photo => {
-                            new_album.push(photo.src)
+                        console.log('User data= ', data)
+                        let user_counts = data[0].counts.split(',');
+                        newReview.username = data[0].username
+                        newReview.location = data[0].location
+                        newReview.friends_count = counts[0]
+                        newReview.reviews_count = counts[1]
+                        newReview.photos_count = counts[2]
+                        newReview.img_src = data[0].profilephoto
+                        axios.get('/api/photos', {
+                            headers: {'review_id': review.id}
                         })
-                        newReview.photos = new_album
-                        reviews.push(newReview);
-                        this.setState({
-                            reviews: reviews,
-                            update: true
+                        .then(({data}) => {
+                            console.log('photo data= ', data)
+                            let new_album = [];
+                            data.forEach(photo => {
+                                console.log('photo= ', photo)
+                                new_album.push(photo.source)
+                            })
+                            newReview.photos = new_album
+                            reviews.push(newReview);
+                            this.setState({
+                                reviews: reviews,
+                                update: true
+                            })
                         })
                     })
                 })
-            })
+            } else {
+                this.setState({
+                    reviews: null,
+                    update: true
+                })
+            }
         })
     this.setState({
         update: false
@@ -121,7 +131,7 @@ export default class ReviewComponent extends React.Component {
                 < Header RestaurantName={this.state.RestaurantName}/> : null }
                 {this.state.update?
                 < LeaveReview RestaurantName={this.state.RestaurantName} writeReviewToggleOn={this.writeReviewToggleOn.bind(this)}/> : null }
-                { this.state.reviews.map(review => (
+                { this.state.reviews !== null && this.state.reviews.map(review => (
                 < Review rating={review.rating} photos={review.photos} username={review.username} location={review.location} date={review.date} friends_count={review.friends_count} reviews_count={review.reviews_count} photos_count={review.photos_count} useful_count={review.useful_count} funny_count={review.funny_count} cool_count={review.cool_count} reviewDescription={review.reviewDescription} imgSrc={review.img_src} key={Math.random()*Math.random(1)}/>
                 ))
                 }

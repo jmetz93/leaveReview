@@ -1,13 +1,13 @@
-const { client } = require('../../database_postgresql/index');
+const { client } = require('../../../database/postgreSQL/index.js');
 
 const user_controllers = {
   get: function(req, res) {
-    client.query(`SELECT * FROM users WHERE users.id = ($1)` , [req.headers.id], (err, data) => {
+    client.query(`SELECT * FROM users WHERE id = ($1)` , [req.headers.user_id], (err, data) => {
       if (err) {
         res.status(400);
         console.log('Error getting users= ', err);
       } else {
-        res.status(200).send(data);
+        res.status(200).send(data.rows);
       }
     })
   },
@@ -53,7 +53,7 @@ const photo_controllers = {
         res.status(400);
         console.log('Error getting photos= ', err);
       } else {
-        res.status(200).send(data);
+        res.status(200).send(data.rows);
       }
     })
   },
@@ -94,12 +94,12 @@ const photo_controllers = {
 
 const restaurant_controllers = {
   get: function(req, res) {
-    client.query(`SELECT * FROM restaurants WHERE restaurants.id = ($1)`, [req.headers.id], (err, data) => {
+    client.query(`SELECT * FROM restaurants WHERE id = ($1)`, [req.headers.id], (err, data) => {
       if (err) {
         res.status(400);
         console.log('Error getting restaurants= ', err);
       } else {
-        res.status(200).send(data);
+        res.status(200).send(data.rows);
       }
     })
   },
@@ -143,15 +143,16 @@ const review_controllers = {
       if (err) {
         console.log('Error getting reviews= ', err);
       } else {
-        res.status(200).send(data);
+        res.status(200).send(data.rows);
       }
     })
   },
   
   post: function(req, res) {
-    client.query(`INSERT INTO reviews (timeposted, counts, ratings, user_id, restaurant_id, review) VALUES ($1)`, [req.headers.timeposted, req.headers.counts, req.headers.ratings, req.headers.user_id, req.headers.restaurant_id, req.headers.review], (err, data) => {
+    console.log('request= ', req.body)
+    client.query(`INSERT INTO reviews (timeposted, counts, ratings, user_id, restaurant_id, review) VALUES ($1, $2, $3, $4, $5, $6)`, [req.body.date, req.body.counts, req.body.rating, req.body.user_id, req.body.restaurantID, req.body.reviewDescription], (err, data) => {
       if (err) {
-        console.log('Error creating user= ', err);
+        console.log('Error creating review= ', err);
       } else {
         res.status(201);
       }
@@ -159,7 +160,7 @@ const review_controllers = {
   },
 
   put: function(req, res) {
-    client.query(`UPDATE reviews SET timeposted = $2, counts = $3, ratings = $4, user_id = $5, restaurant_id = $6, review = $7 WHERE  id = $1`, [req.headers.id, req.headers.timeposted, req.headers.counts, req.headers.ratings, req.headers.user_id, req.headers.restaurant_id, req.headers.review], (err, data) => {
+    client.query(`UPDATE reviews SET timeposted = $2, counts = $3, ratings = $4, user_id = $5, restaurant_id = $6, review = $7 WHERE  id = $1`, [req.headers.id, req.headers.timeposted, req.headers.counts, req.headers.rating, req.headers.user_id, req.headers.restaurant_id, req.headers.review], (err, data) => {
       if (err) {
         res.status(400);
         console.log('Error, updating user', err);
