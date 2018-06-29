@@ -37,12 +37,10 @@ export default class ReviewComponent extends React.Component {
 
     loadReviews() {
         console.log('reloading reviews')
-        console.log('restId= ', this.state.RestaurantID)
         axios.get('/api/reviews', {
             headers: {'restaurant_id': this.state.RestaurantID}
         })
         .then(({data}) => {
-            console.log('reviews data= ', data)
             let reviews = [];
             if (data.length > 0) {
                 data.forEach(review => {
@@ -62,12 +60,10 @@ export default class ReviewComponent extends React.Component {
                         rating: review.rating,
                         photos: null
                     }
-                    console.log('id= ', review.user_id);
                     axios.get('/api/users', {
                         headers: {'user_id': review.user_id}
                     })
                     .then(({data}) => {
-                        console.log('User data= ', data)
                         let user_counts = data[0].counts.split(',');
                         newReview.username = data[0].username
                         newReview.location = data[0].location
@@ -79,10 +75,8 @@ export default class ReviewComponent extends React.Component {
                             headers: {'review_id': review.id}
                         })
                         .then(({data}) => {
-                            console.log('photo data= ', data)
                             let new_album = [];
                             data.forEach(photo => {
-                                console.log('photo= ', photo)
                                 new_album.push(photo.source)
                             })
                             newReview.photos = new_album
