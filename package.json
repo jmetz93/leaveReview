@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/JoshuaDJacobs/Yelp-Review-Component#readme",
   "dependencies": {
+    "artillery": "^1.6.0-21",
     "axios": "^0.18.0",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
@@ -37,6 +38,7 @@
     "image-webpack-loader": "^4.3.0",
     "jest-enzyme": "^6.0.1",
     "mongodb": "^3.0.10",
+    "newrelic": "^4.2.0",
     "nodemon": "^1.17.5",
     "pg": "^6.1.0",
     "pg-promise": "^8.4.4",

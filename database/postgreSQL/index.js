@@ -1,22 +1,43 @@
+const { Pool } = require('pg');
 const { Client } = require('pg');
 
-const client = new Client({
-  user: 'jacobmetzinger',
-  host: 'localhost',
+const pool = new Pool({
+  user: 'postgres',
+  host: process.env.DB_HOST,
   database: 'reviews',
-  password: 'jacob'
+  password: ''
 });
-client.connect((err) => {
-  if (err) {
-    console.log('connection error', err);
-  } else {
-    console.log('connected to database');
-  }
-})
 
-module.exports = {
-  client
-};
+pool.on('error', (err, client) => {
+  console.error('Unexpected error on idle client', err)
+  process.exit(-1)
+});
+
+pool.connect((err) => {
+  if (err) {
+    console.log('error connecting to db', err)
+    } else {
+      console.log('successfully connected to db')
+    }
+})
+                  
+// const client = new Client({
+//   user: 'jacobmetzinger',
+//   host: 'localhost',
+//   database: 'reviews',
+//   password: 'jacob'
+// });
+
+
+// client.connect((err) => {
+//   if (err) {
+//     console.log('connection error', err);
+//   } else {
+//     console.log('connected to database');
+//   }
+// })
+
+module.exports.client = pool;
 
 
 

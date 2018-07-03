@@ -1,3 +1,4 @@
+require('newrelic');
 const parser = require('body-parser');
 const path = require('path');
 const express = require('express');
@@ -8,6 +9,7 @@ const App = express();
 require('../database/postgreSQL/index.js');
 //require('../database/mongo/index.js');
 const {router} = require('./router');
+
 
 App.use(parser.json());
 App.use(parser.urlencoded({extended: true}));

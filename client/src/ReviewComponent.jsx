@@ -66,7 +66,7 @@ export default class ReviewComponent extends React.Component {
                     .then(({data}) => {
                         let user_counts = data[0].counts.split(',');
                         newReview.username = data[0].username
-                        newReview.location = data[0].location
+                        newReview.location = data[0].city
                         newReview.friends_count = counts[0]
                         newReview.reviews_count = counts[1]
                         newReview.photos_count = counts[2]

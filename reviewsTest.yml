@@ -1,0 +1,51 @@
+config:
+  target: 'http://localhost:3000'
+  http: 
+    - pool: 10
+  phases:
+    - duration: 30
+      arrivalRate: 50
+scenarios:
+  # - name: 'Get Routes'
+  # - flow:
+  #   - loop: 
+  #       - get:
+  #           url: '/api/restaurants?id=8000000'
+  #       - get:
+  #           url: '/api/reviews?restaurant_id=8000000'
+  #       - get:
+  #           url: '/api/users?id={{ $randomNumber(100, 10000) }}'
+  #       - get:
+  #           url: '/api/photos?review_id=8000000'
+  #     count: 10
+  # - name: 'Post Routes'
+  - flow: 
+    - loop:
+        - post:
+            url: 'api/restaurants'
+            json:
+              restaurant_name: 'Applebees'
+        # - post: 
+        #     url: 'api/reviews'
+        #     body:
+        #       timeposted: '06/30/2018'
+        #       counst: '43, 43, 43'
+        #       ratings: '5'
+        #       user_id: '5678932'
+        #       restaurant_id: '9884534'
+        #       review: 'Lets go get thrown out of an Applebees!'
+        # - post:
+        #     url: 'api/users'
+        #     body:
+        #       username: 'Ricky Bobby'
+        #       profilephoto: 'https://s3.amazonaws.com/uifaces/faces/twitter/jmillspaysbills/128.jpg' 
+        #       counts: '42, 42, 42'
+        #       city: 'Talladega County'
+        # - post:
+        #     url: 'api/users'
+        #     body:
+        #       source: 'https://s3-media3.fl.yelpcdn.com/bphoto/eH9O_dKH-y7yMUUdidSJFw/o.jpg'
+        #       review_id: '4567967'
+        #       restaurant_id: '4567346'
+    count: 10
+

@@ -6,11 +6,11 @@ services:
           - "5432:5432" 
         environment:
           POSTGRES_USER: postgres
-          POSTGRES_DB: postgres
+          POSTGRES_DB: reviews
     api:
         build: .
         command: bash -c "npm start && npm run build:db"
-        image: /node-web-app
+        image: leave-review
         ports:
           - "3000:3000"
         volumes:
@@ -18,7 +18,10 @@ services:
         depends_on:
           - db
         environment:
-          DATABASE_URL: postgres://postgres@db
+          DB_HOST: db
+          
+  # volumes:
+  #   pgdata:
 
 # Change port to 80:3000 on API ports
 # Remake image

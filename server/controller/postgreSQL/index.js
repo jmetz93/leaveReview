@@ -5,8 +5,10 @@ const user_controllers = {
     client.query(`SELECT * FROM users WHERE id = ($1)` , [req.headers.user_id], (err, data) => {
       if (err) {
         res.status(400);
-        console.log('Error getting users= ', err);
+        // console.log('Error getting users= ', err);
       } else {
+        // console.log('Found user');
+        
         res.status(200).send(data.rows);
       }
     })
@@ -16,7 +18,7 @@ const user_controllers = {
     client.query(`INSERT INTO users (username, profilephoto, counts, city) VALUES ($1, $2, $3, $4)`, [req.headers.username, req.headers.profilephoto, req.headers.counts, req.headers.city], (err, data) => {
       if (err) {
         res.status(400);
-        console.log('Error creating user= ', err);
+        //console.log('Error creating user= ', err);
       } else {
         res.status(201).send({});
       }
@@ -27,7 +29,7 @@ const user_controllers = {
     client.query(`UPDATE users SET username = $2, profilephoto = $3, counts = $4, city = $5 WHERE  username = $1`, [req.headers.oldname, req.headers.username, req.headers.profilephoto, req.headers.counts, req.headers.city], (err, data) => {
       if (err) {
         res.status(400);
-        console.log('Error, updating user', err);
+        // console.log('Error, updating user', err);
       } else {
         res.status(200).send({});
       }
@@ -35,10 +37,10 @@ const user_controllers = {
   },
 
   delete: function(req, res) {
-    client.query(`DELETE FROM users WHERE users.username = ($1)`, [req.headers.username], (err, data) => {
+    client.query(`DELETE FROM users WHERE username = ($1)`, [req.headers.username], (err, data) => {
       if (err) {
         res.status(400);
-        console.log('Error deleting user', err);
+        // console.log('Error deleting user', err);
       } else {
         res.status(200).send({});
       }
@@ -48,11 +50,12 @@ const user_controllers = {
 
 const photo_controllers = {
   get: function(req, res) {
-    client.query(`SELECT * FROM photos WHERE photos.review_id = ($1)`, [req.headers.review_id], (err, data) => {
+    client.query(`SELECT * FROM photos WHERE review_id = ($1)`, [req.headers.review_id], (err, data) => {
       if (err) {
         res.status(400);
-        console.log('Error getting photos= ', err);
+        // console.log('Error getting photos= ', err);
       } else {
+        // console.log('Found photo');
         res.status(200).send(data.rows);
       }
     })
@@ -62,7 +65,7 @@ const photo_controllers = {
     client.query(`INSERT INTO photos (source, review_id, restaurant_id) VALUES ($1, $2, $3)`, [req.headers.source, req.headers.review_id, req.headers.restaurant_id], (err, data) => {
       if (err) {
         res.status(400);
-        console.log('Error creating photo= ', err);
+        // console.log('Error creating photo= ', err);
       } else {
         res.status(201).send({});
       }
@@ -73,7 +76,7 @@ const photo_controllers = {
     client.query(`UPDATE photos SET source = $2, review_id = $3, restaurant_id = $4 WHERE  id = $1`, [req.headers.id, req.headers.source, req.headers.review_id, req.headers.reviews_id], (err, data) => {
       if (err) {
         res.status(400);
-        console.log('Error, updating user', err);
+        // console.log('Error, updating user', err);
       } else {
         res.status(200).send({});
       }
@@ -81,10 +84,10 @@ const photo_controllers = {
   },
 
   delete: function(req, res) {
-    client.query(`DELETE FROM photos WHERE photos.id = ($1)`, [req.headers.id], (err, data) => {
+    client.query(`DELETE FROM photos WHERE id = ($1)`, [req.headers.id], (err, data) => {
       if (err) {
         res.status(400);
-        console.log('Error deleting user', err);
+        // console.log('Error deleting user', err);
       } else {
         res.status(200).send({});
       }
@@ -97,8 +100,9 @@ const restaurant_controllers = {
     client.query(`SELECT * FROM restaurants WHERE id = ($1)`, [req.headers.id], (err, data) => {
       if (err) {
         res.status(400);
-        console.log('Error getting restaurants= ', err);
+        // console.log('Error getting restaurants= ', err);
       } else {
+        // console.log('Found restaurant');
         res.status(200).send(data.rows);
       }
     })
@@ -107,7 +111,7 @@ const restaurant_controllers = {
   post: function(req, res) {
     client.query(`INSERT INTO restaurants (restaurant_name) VALUES ($1)`, [req.headers.restaurant_name], (err, data) => {
       if (err) {
-        console.log('Error creating restaurant= ', err);
+        // console.log('Error creating restaurant= ', err);
       } else {
         res.status(201);
       }
@@ -118,7 +122,7 @@ const restaurant_controllers = {
     client.query(`UPDATE restaurant SET restaurantname = $2 WHERE  restaurantname = $1`, [req.headers.oldname, req.headers.restaurantname], (err, data) => {
       if (err) {
         res.status(400);
-        console.log('Error, updating user', err);
+        // console.log('Error, updating user', err);
       } else {
         res.status(200).send({});
       }
@@ -129,7 +133,7 @@ const restaurant_controllers = {
     client.query(`DELETE FROM restaurants WHERE restaurants.restaurantname = ($1)`, [req.headers.restaurantname], (err, data) => {
       if (err) {
         res.status(400);
-        console.log('Error deleting user', err);
+        // console.log('Error deleting user', err);
       } else {
         res.status(200).send({});
       }
@@ -139,20 +143,21 @@ const restaurant_controllers = {
 
 const review_controllers = {
   get: function(req, res) {
-    client.query(`SELECT * FROM reviews WHERE reviews.restaurant_id = ($1)`, [req.headers.restaurant_id], (err, data) => {
+    client.query(`SELECT * FROM reviews WHERE restaurant_id = ($1)`, [req.headers.restaurant_id], (err, data) => {
       if (err) {
-        console.log('Error getting reviews= ', err);
+        // console.log('Error getting reviews= ', err);
       } else {
+        // console.log('Found reviews');
         res.status(200).send(data.rows);
       }
     })
   },
   
   post: function(req, res) {
-    console.log('request= ', req.body)
+    // console.log('request= ', req.body)
     client.query(`INSERT INTO reviews (timeposted, counts, ratings, user_id, restaurant_id, review) VALUES ($1, $2, $3, $4, $5, $6)`, [req.body.date, req.body.counts, req.body.rating, req.body.user_id, req.body.restaurantID, req.body.reviewDescription], (err, data) => {
       if (err) {
-        console.log('Error creating review= ', err);
+        // console.log('Error creating review= ', err);
       } else {
         res.status(201);
       }
@@ -163,7 +168,7 @@ const review_controllers = {
     client.query(`UPDATE reviews SET timeposted = $2, counts = $3, ratings = $4, user_id = $5, restaurant_id = $6, review = $7 WHERE  id = $1`, [req.headers.id, req.headers.timeposted, req.headers.counts, req.headers.rating, req.headers.user_id, req.headers.restaurant_id, req.headers.review], (err, data) => {
       if (err) {
         res.status(400);
-        console.log('Error, updating user', err);
+        // console.log('Error, updating user', err);
       } else {
         res.status(200).send({});
       }
@@ -171,10 +176,10 @@ const review_controllers = {
   },
 
   delete: function(req, res) {
-    client.query(`DELETE FROM reviews WHERE reviews.id = ($1)`, [req.headers.id], (err, data) => {
+    client.query(`DELETE FROM reviews WHERE id = ($1)`, [req.headers.id], (err, data) => {
       if (err) {
         res.status(400);
-        console.log('Error deleting user', err);
+        // console.log('Error deleting user', err);
       } else {
         res.status(200).send({});
       }
@@ -202,16 +207,16 @@ module.exports = {
 //             }
 //         })
 //         .then(data => {
-//             console.log('user data received')
+            //console.log('user data received')
 //             res.status(200).send(data)
 //         })
 //         .catch(err => {
-//             console.log('error receiving user data', err)
+            //console.log('error receiving user data', err)
 //             res.status(401)
 //         })
 //     },
 //     post: function(req, res) {
-//         console.log('test')
+        //console.log('test')
 //         res.send('applied')
 //     }
 // }
@@ -224,16 +229,16 @@ module.exports = {
 //             }
 //         })
 //         .then(data => {
-//             console.log('photo data received')
+            //console.log('photo data received')
 //             res.status(200).send(data)
 //         })
 //         .catch(err => {
-//             console.log('error receiving photo data', err)
+            //console.log('error receiving photo data', err)
 //             res.status(401)
 //         })
 //     },
 //     post: function(req, res) {
-//         console.log('test')
+        //console.log('test')
 //         res.send('applied')
 //     }
 // }
@@ -245,12 +250,12 @@ module.exports = {
 //             res.status(200).send(data)
 //         })
 //         .catch(err => {
-//             console.log('error receiving restaurant data', err)
+           // console.log('error receiving restaurant data', err)
 //             res.status(401)
 //         })
 //     },
 //     post: function(req, res) {
-//         console.log('test')
+        //console.log('test')
 //         res.send('applied')
 //     }
 // }
@@ -264,11 +269,11 @@ module.exports = {
 //             }
 //         })
 //         .then(data => {
-//             console.log('review data received')
+            //console.log('review data received')
 //             res.status(200).send(data)
 //         })
 //         .catch(err => {
-//             console.log('error receiving review data', err)
+           // console.log('error receiving review data', err)
 //             res.status(401)
 //         })
 //     },

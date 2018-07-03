@@ -1,2 +1,4 @@
 node_modules
 awskey
+newrelic.js
+newrelic_agent.log
