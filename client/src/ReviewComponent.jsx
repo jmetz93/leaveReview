@@ -23,10 +23,12 @@ export default class ReviewComponent extends React.Component {
         let restaurantName = ''
         let restaurantID = 0
         //http://35.174.116.97:3000/api/restaurants
+        console.log('Mounting');
         axios.get('/api/restaurants', {
             headers: {'id': Math.ceil(Math.random() * 10)}
         })
             .then(({data}) => {
+                console.log('Restaurant= ', data);
                 this.setState({
                     RestaurantID: data[0].id,
                     RestaurantName: data[0].restaurantname,
@@ -37,10 +39,10 @@ export default class ReviewComponent extends React.Component {
 
     loadReviews() {
         console.log('reloading reviews')
-        axios.get('/api/reviews', {
-            headers: {'restaurant_id': this.state.RestaurantID}
-        })
+        console.log('Request reviews for id= ', this.state.RestaurantID)
+        axios.get('/api/reviews', { params: {'restaurant_id': this.state.RestaurantID}})
         .then(({data}) => {
+            console.log('Reviews= ', data);
             let reviews = [];
             if (data.length > 0) {
                 data.forEach(review => {
@@ -61,7 +63,7 @@ export default class ReviewComponent extends React.Component {
                         photos: null
                     }
                     axios.get('/api/users', {
-                        headers: {'user_id': review.user_id}
+                        params: {'user_id': review.user_id}
                     })
                     .then(({data}) => {
                         let user_counts = data[0].counts.split(',');
@@ -72,7 +74,7 @@ export default class ReviewComponent extends React.Component {
                         newReview.photos_count = counts[2]
                         newReview.img_src = data[0].profilephoto
                         axios.get('/api/photos', {
-                            headers: {'review_id': review.id}
+                            params: {'review_id': review.id}
                         })
                         .then(({data}) => {
                             let new_album = [];
@@ -94,6 +96,8 @@ export default class ReviewComponent extends React.Component {
                     update: true
                 })
             }
+        }).catch(err => {
+            console.log('Error getting reviews');
         })
     this.setState({
         update: false
@@ -121,15 +125,15 @@ export default class ReviewComponent extends React.Component {
     render() {
         return (
             <div>
-                {this.state.update?
+                {this.state.update ?
                 < Header RestaurantName={this.state.RestaurantName}/> : null }
-                {this.state.update?
+                {this.state.update ?
                 < LeaveReview RestaurantName={this.state.RestaurantName} writeReviewToggleOn={this.writeReviewToggleOn.bind(this)}/> : null }
                 { this.state.reviews !== null && this.state.reviews.map(review => (
                 < Review rating={review.rating} photos={review.photos} username={review.username} location={review.location} date={review.date} friends_count={review.friends_count} reviews_count={review.reviews_count} photos_count={review.photos_count} useful_count={review.useful_count} funny_count={review.funny_count} cool_count={review.cool_count} reviewDescription={review.reviewDescription} imgSrc={review.img_src} key={Math.random()*Math.random(1)}/>
                 ))
                 }
-                { this.state.writeReview? < WriteReview  toggledRating={this.state.toggledRating} loadReviews={this.loadReviews.bind(this)} writeReviewToggleOff={this.writeReviewToggleOff.bind(this)} RestaurantID={this.state.RestaurantID} RestaurantName={this.state.RestaurantName}/> : null }
+                {this.state.writeReview ? < WriteReview  toggledRating={this.state.toggledRating} loadReviews={this.loadReviews.bind(this)} writeReviewToggleOff={this.writeReviewToggleOff.bind(this)} RestaurantID={this.state.RestaurantID} RestaurantName={this.state.RestaurantName}/> : null }
             </div>
         )
     }

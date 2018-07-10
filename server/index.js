@@ -1,4 +1,5 @@
 require('newrelic');
+require('dotenv').config();
 const parser = require('body-parser');
 const path = require('path');
 const express = require('express');
@@ -17,6 +18,10 @@ App.use(cors());
 
 App.use(express.static(path.join(__dirname, '../client/dist/')))
 App.use('/api', router);
+
+App.get('/loaderio-02cad0f3c29e34b4f0431abf82cf763e', (req, res) => {
+    res.send(process.env.loader_key);
+})
 
 App.listen(PORT, err => {
     err? console.log('Failed to start server: ', err) : console.log('Listening on port ', PORT)

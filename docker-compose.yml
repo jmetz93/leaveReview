@@ -1,24 +1,14 @@
 version: '3'
 services:
-    db:
-        image: postgres
-        ports:
-          - "5432:5432" 
-        environment:
-          POSTGRES_USER: postgres
-          POSTGRES_DB: reviews
-    api:
-        build: .
-        command: bash -c "npm start && npm run build:db"
+    web:
         image: leave-review
+        command: bash -c "npm start && npm run build:db"
         ports:
           - "3000:3000"
         volumes:
           - .:/app
-        depends_on:
-          - db
         environment:
-          DB_HOST: db
+          DB_HOST: "13.58.85.48"
           
   # volumes:
   #   pgdata:
