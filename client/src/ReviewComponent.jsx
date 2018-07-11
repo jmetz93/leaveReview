@@ -23,8 +23,7 @@ export default class ReviewComponent extends React.Component {
         let restaurantName = ''
         let restaurantID = 0
         //http://35.174.116.97:3000/api/restaurants
-        console.log('Mounting');
-        axios.get('/api/restaurants', {
+        axios.get('http://localhost:3000/api/restaurants', {
             headers: {'id': Math.ceil(Math.random() * 10)}
         })
             .then(({data}) => {
@@ -40,7 +39,7 @@ export default class ReviewComponent extends React.Component {
     loadReviews() {
         console.log('reloading reviews')
         console.log('Request reviews for id= ', this.state.RestaurantID)
-        axios.get('/api/reviews', { params: {'restaurant_id': this.state.RestaurantID}})
+        axios.get('http://localhost:3000/api/reviews', { params: {'restaurant_id': this.state.RestaurantID}})
         .then(({data}) => {
             console.log('Reviews= ', data);
             let reviews = [];
@@ -62,7 +61,7 @@ export default class ReviewComponent extends React.Component {
                         rating: review.rating,
                         photos: null
                     }
-                    axios.get('/api/users', {
+                    axios.get('http://localhost:3000/api/users', {
                         params: {'user_id': review.user_id}
                     })
                     .then(({data}) => {
@@ -73,7 +72,7 @@ export default class ReviewComponent extends React.Component {
                         newReview.reviews_count = counts[1]
                         newReview.photos_count = counts[2]
                         newReview.img_src = data[0].profilephoto
-                        axios.get('/api/photos', {
+                        axios.get('http://localhost:3000/api/photos', {
                             params: {'review_id': review.id}
                         })
                         .then(({data}) => {

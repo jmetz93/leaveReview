@@ -4,12 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/styles.css">
     <link href='http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css' rel='stylesheet' type='text/css'>
     <title>Document</title>
 </head>
 <body>
-    <div id='review-component'></div>
-    <script src='bundle.js'></script>
+  <div id="ReviewComponent"></div>
+  <script src="/lib/react.development.js"></script>
+  <script src="/lib/react-dom.development.js"></script>
+  <script src="app.js"></script>
+  <script>
+    ReactDOM.render(
+      React.createElement(ReviewComponent),
+      document.getElementById('ReviewComponent')
+    );
+  </script>
 </body>
 </html>  

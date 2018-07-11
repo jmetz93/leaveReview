@@ -3,3 +3,6 @@ awskey
 newrelic.js
 newrelic_agent.log
 .env
+client/dist/app-server.js
+client/dist/app.js
+client/dist/main.css

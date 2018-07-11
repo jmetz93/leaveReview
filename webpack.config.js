@@ -1,8 +1,10 @@
 const path = require('path');
 const SRC_DIR = path.join(__dirname, '/client/src');
 const DIST_DIR = path.join(__dirname, '/client/dist');
+const ExtractText = require('extract-text-webpack-plugin');
+const HtmlWebpackPlug = require('html-webpack-plugin');
 
-const common_css = {
+const common_server = {
     module: {
       rules: [
         {
@@ -10,7 +12,7 @@ const common_css = {
           include: SRC_DIR,
           loader: "babel-loader",
           options: {
-              presets: ['es2015', 'react', 'stage-0']
+              presets: ['es2015', 'react', 'env']
           }
         },
         {
@@ -29,10 +31,13 @@ const common_css = {
         },
         {
             test: /\.css$/,
-            loader: 'style-loader!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]' 
-        }
-      ]
-    }
+            use: ExtractText.extract({ fallback: 'style-loader', use: ['css-loader'] }) 
+        },
+      ],
+    },
+    plugins: [
+        new ExtractText('[name].css')
+    ]
   };
 
   const common_client = {
@@ -41,11 +46,10 @@ const common_css = {
         {
           test: /\.jsx?/,
           include: SRC_DIR,
-          use: [
-            {
-              loader: "babel-loader"
-            }
-          ]
+          loader: "babel-loader",
+          options: {
+              presets: ['es2015', 'react', 'stage-0']
+          }
         },
         {
           test: /\.css$/,
@@ -69,7 +73,6 @@ const common_css = {
     },
   }
   
-
   
   const client = {
     entry: `${SRC_DIR}/client.js`,
@@ -77,6 +80,7 @@ const common_css = {
       path: DIST_DIR,
       filename: 'app.js'
     },
+    devtool: 'eval-source-map',
   };
   
   const server = {
@@ -91,7 +95,7 @@ const common_css = {
   
   module.exports = [
     Object.assign({}, common_client, client),
-    Object.assign({}, common_css, server)
+    Object.assign({}, common_server, server)
   ];
 // module.exports = {
 //     mode: 'development',
