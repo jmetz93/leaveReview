@@ -1,5 +1,5 @@
-# Yelp-Review-Component
-This is a component that renders reviews from a mongo database with mock reviews in. Designed to be a clone of Yelp's reviews microservice.
+# Crowd-Source-Review-Component
+This is a microservice that renders reviews from a mongo database with mock reviews in. All data is randomly generated and you are able to give your own reviews as well.
 
 # Set up in Terminal Steps
 - "npm install" for dependencies
