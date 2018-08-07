@@ -1,5 +1,5 @@
 node_modules
-awskey
+awsKeys
 newrelic.js
 newrelic_agent.log
 .env
