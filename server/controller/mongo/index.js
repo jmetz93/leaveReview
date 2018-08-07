@@ -1,317 +1,183 @@
-const { db }  = require('../../../database/mongo/index.js')
+const { db } = require('../../../database/mongo/index.js');
+const { returnLast } = require('../../../database/mongo/index.js');
+const { increment } = require('../../../database/mongo/index.js');
 
+const POST = (op, req, res) => {
+  let data = req.body;
+  data._id = increment();
+  db().collection(op).insertOne(data)
+    .then(data => {
+      res.status(200).send('Success');
+    })
+    .catch(err => {
+      res.status(404).send('ERROR');
+    })
+};
 
-const user_controllers = {
-  get: function(req, res) {
-    /*MongoClient.connect(url, (err, db) => {
-      if (err) {
-        console.log('Error connecting to db on get user request', err);
-      } else {
-        const db = db.db('leavereviews');*/
-        db.collection('users').findOne({_id: req.headers.id}, (err, result) => { 
-          if (err) {
-            res.status(400).send({});
-            console.log('Error finding User', err);
-          } else {
-            console.log('Found user');
-            res.status(200).send(result);
-          }
-        })
-      /*}
-    })*/
-  },
+const DELETE = (op, req, res) => {
+  const id = req.body.id;
+  db().collection(op).deleteOne({_id: id })
+    .then(data => {
+      res.status(200).send('Data has been deleted');
+    })
+    .catch(err => {
+      console.log('Err in delete: ', err);
+      res.status(404).send('ERROR');
+    })
+};
 
-  post: function(req, res) {
-    /*MongoClient.connect(url, (err, db) => {
-      if (err) {
-        console.log('Error connecting to db on post user request', err);
-      } else {
-        const db = db.db('leavereviews');*/
-        db.collection('users').insertOne({}, (err, result) => {
-          if (err) {
-            res.status(400).send({});
-            console.log('Error adding User');
-          } else {
-            res.status(201).send({});
-            console.log('New user successfully added');
-          }
-        })
-      /*}
-    })*/
+const PUT = (op, req, res) => {
+  const id = {_id: req.body.id};
+  const newData = {
+    $set : req.body.update
+  };
+  db().collection(op).updateOne(id, newData)
+    .then(data => {
+      res.status(200).send('Data has been updated');
+    })
+    .catch(err => {
+      console.log('Err in PUT ', err);
+      res.status(404).send('ERROR');
+    })
+}
+
+user_controllers = {
+  get: (req, res) => {
+    console.log('user: ', req.query.user_id);
+    db().collection('users').findOne({ _id: +req.query.user_id }, {fields: {_id: 0}})
+      .then(data => {
+        console.log('User: ', data)
+        res.status(200).send([data]);
+      })
+      .catch(err => {
+        console.log('Err in users: ', err);
+        res.status(401).send('ERROR');
+      })
   },
-  
-  put: function(req, res) {
-    /*MongoClient.connect(url, (err, db) => {
-      if (err) {
-        console.log('Error connecting to db on update user request', err);
-      } else {
-        const db = db.db('leavereviews');*/
-        db.collection('users').updateOne({/*something with req*/}, (err, result) => {
-          if (err) {
-            res.status(400).send({});
-            console.log('Error updating User');
-          } else {
-            res.status(200).send({});
-            console.log('User successfully updated');
-          }
-        })
-      /*}
-    })*/
+  post: (req, res) => {
+    POST('users', req, res);
   },
-  
-  delete: function(req, res) {
-    /*MongoClient.connect(url, (err, db) => {
-      if (err) {
-        console.log('Error connecting to db on delete user request', err);
-      } else {
-        const db = db.db('leavereviews');*/
-        db.collection('users').deleteOne({/*something with req*/}, (err, result) => {
-          if (err) {
-            res.status(400).send({});
-            console.log('Error deleting User');
-          } else {
-            res.status(200).send({});
-            console.log('User successfully deleted');
-          }
-        })
-      /*}
-    })*/
+  delete: (req, res) => {
+    db().collection('users').deleteOne({_id: req.body.id})
+      .then(data => {
+        db().collection('reviews').deleteMany({user_id: req.body.id})
+          .then(data => {
+            console.log('Deleted');
+            res.status(200).send('Data has been deleted');
+          })
+          .catch(err => {
+            console.log('Error in delete users: ', err);
+          })
+      })
+      .catch(err => {
+        console.log('Error in delete users: ', err);
+      })
+  },
+  put: (req, res) => {
+    PUT('users', req, res);
   }
 }
 
-const photo_controllers = {
-  get: function(req, res) {
-    /*MongoClient.connect(url, (err, db) => {
-      if (err) {
-        console.log('Error connecting to db on get photos request', err);
-      } else {
-        const db = db.db('leavereviews');*/
-        db.collection('photos').find({/*some req property*/}, {/*for some prop value*/}).toArray((err, result) => { 
-          if (err) {
-            res.status(400).send({});
-            console.log('Error finding Photos', err);
-          } else {
-            console.log('Successfully found photos');
-            res.status(200).send(result);
-          }
-        })
-      /*}
-    })*/
-  },
+photo_controllers = {
+  get: (req, res) => {
+    db().collection('photos').find({ review_id: +req.query.review_id }, {fields: {_id: 0, review_id: 0, restaurant_id: 0}}).toArray()
+      .then(data => {
+        console.log('photo request');
+        res.status(200).send(data);
+      })
+      .catch(err => {
+        res.status(401).send('err in photo GET: ', err);
+      })
 
-  post: function(req, res) {
-    /*MongoClient.connect(url, (err, db) => {
-      if (err) {
-        console.log('Error connecting to db on post photo request', err);
-      } else {
-        const db = db.db('leavereviews');*/
-        db.collection('photos').insertOne({/*something with req*/}, (err, result) => {
-          if (err) {
-            res.status(400).send({});
-            console.log('Error adding Photo');
-          } else {
-            res.status(201).send({});
-            console.log('New photo successfully added');
-          }
-        })
-      /*}
-    })*/
   },
-  
-  put: function(req, res) {
-    /*MongoClient.connect(url, (err, db) => {
-      if (err) {
-        console.log('Error connecting to db on update photo request', err);
-      } else {
-        const db = db.db('leavereviews');*/
-        db.collection('photos').updateOne({/*something with req*/}, (err, result) => {
-          if (err) {
-            res.status(400).send({});
-            console.log('Error updating Photo');
-          } else {
-            res.status(200).send({});
-            console.log('Photo successfully updated');
-          }
-        })
-      /*}
-    })*/
+  post: (req, res) => {
+    POST('photos', req, res);
   },
-  
-  delete: function(req, res) {
-    /*MongoClient.connect(url, (err, db) => {
-      if (err) {
-        console.log('Error connecting to db on delete user request', err);
-      } else {
-        const db = db.db('leavereviews');*/
-        db.collection('photos').deleteOne({/*something with req*/}, (err, result) => {
-          if (err) {
-            res.status(400).send({});
-            console.log('Error deleting Photo');
-          } else {
-            res.status(200).send({});
-            console.log('Photo successfully deleted');
-          }
-        })
-      /*}
-    })*/
+  delete: (req, res) => {
+    DELETE('photos', req, res);
+  },
+  put: (req, res) => {
+    PUT('photos', req, res);
   }
 }
 
-const restaurant_controllers = {
-  get: function(req, res) {
-    /*MongoClient.connect(url, (err, db) => {
-      if (err) {
-        console.log('Error connecting to db on get restaurant request', err);
-      } else {
-        const db = db.db('leavereviews');*/
-        db.collection('restaurants').findOne({/*some req property*/}, (err, result) => { 
-          if (err) {
-            res.status(400).send({});
-            console.log('Error finding Restaurant', err);
-          } else {
-            console.log('Found restaurant');
-            res.status(200).send(result);
-            db.close();
-          }
-        })
-      /*}
-    })*/
+restaurant_controllers = {
+  get: (req, res) => {
+    db().collection('restaurants').findOne({ _id: +req.query.ID }, {fields: {_id: 0}})
+      .then(row => {
+        res.status(200).send([row]);
+      })
+      .catch(err => {
+        console.log('Err in restaurant GET: ', err);
+        res.status(401).send('ERROR');
+      })
   },
-
-  post: function(req, res) {
-    /*MongoClient.connect(url, (err, db) => {
-      if (err) {
-        console.log('Error connecting to db on post restaurant request', err);
-      } else {
-        const db = db.db('leavereviews');*/
-        db.collection('restaurants').insertOne({/*something with req*/}, (err, result) => {
-          if (err) {
-            res.status(400).send({});
-            console.log('Error adding Restaurant');
-          } else {
-            res.status(201).send({});
-            console.log('New restaurant successfully added');
-          }
-        })
-      /*}
-    })*/
+  post: (req, res) => {
+    POST('restaurants', req, res);
   },
-  
-  put: function(req, res) {
-    /*MongoClient.connect(url, (err, db) => {
-      if (err) {
-        console.log('Error connecting to db on update restaurant request', err);
-      } else {
-        const db = db.db('leavereviews');*/
-        db.collection('restaurants').updateOne({/*something with req*/}, (err, result) => {
-          if (err) {
-            res.status(400).send({});
-            console.log('Error updating Restaurant');
-          } else {
-            res.status(200).send({});
-            console.log('Restaurant successfully updated');
-          }
-        })
-      /*}
-    })*/
+  delete: (req, res) => {
+    db().collection('restaurants').deleteOne({_id: req.body.id})
+      .then(data => {
+        db().collection('reviews').deleteMany({restaurant_id: req.body.id})
+          .then(data => {
+            db().collection('photos').deleteMany({restaurant_id: req.body.id})
+              .then(data => {
+                res.status(200).send('Data has been deleted');
+              })
+              .catch(err => {
+                console.log('error in restaurants delete: ', err);
+                res.status(400).send('ERROR');
+              })
+          })
+          .catch(err => {
+            console.log('error in restaurants delete: ', err);
+            res.status(400).send('ERROR');
+          })
+      })
+      .catch(err => {
+        console.log('error in restaurants delete: ', err);
+        res.status(400).send('ERROR');
+      })
   },
-  
-  delete: function(req, res) {
-    /*MongoClient.connect(url, (err, db) => {
-      if (err) {
-        console.log('Error connecting to db on delete restaurant request', err);
-      } else {
-        const db = db.db('leavereviews');*/
-        db.collection('restaurants').deleteOne({/*something with req*/}, (err, result) => {
-          if (err) {
-            res.status(400).send({});
-            console.log('Error deleting Restaurant');
-          } else {
-            res.status(200).send({});
-            console.log('Restaurant successfully deleted');
-          }
-        })
-      /*}
-    })*/
+  put: (req, res) => {
+    PUT('restaurants', req, res);
   }
 }
 
-const review_controllers = {
-  get: function(req, res) {
-    /*MongoClient.connect(url, (err, db) => {
-      if (err) {
-        console.log('Error connecting to db on get review request', err);
-      } else {
-        const db = db.db('leavereviews');*/
-        db.collection('reviews').findOne({/*some req property*/}, (err, result) => { 
-          if (err) {
-            res.status(400).send({});
-            console.log('Error finding Review', err);
-          } else {
-            console.log('Found review');
-            res.status(200).send(result);
-            db.close();
-          }
-        })
-      /*}
-    })*/
+review_controllers = {
+  get: (req, res) => {
+    console.log('id= ', req.query.restaurant_id);
+    db().collection('reviews').find({ restaurant_id: +req.query.restaurant_id }, {fields: {restaurant_id: 0}}).toArray()
+      .then(data => {
+        res.status(200).send(data);
+      })
+      .catch(err => {
+        console.log('err in reviews: ', err);
+        res.status(404).send('ERROR');
+      })
   },
-
-  post: function(req, res) {
-    /*MongoClient.connect(url, (err, db) => {
-      if (err) {
-        console.log('Error connecting to db on post review request', err);
-      } else {
-        const db = db.db('leavereviews');*/
-        db.collection('reviews').insertOne({/*something with req*/}, (err, result) => {
-          if (err) {
-            res.status(400).send({});
-            console.log('Error adding Review');
-          } else {
-            res.status(201).send({});
-            console.log('New review successfully added');
-          }
-        })
-      /*}
-    })*/
+  post: (req, res) => {
+    POST('reviews', req, res);
   },
-  
-  put: function(req, res) {
-    /*MongoClient.connect(url, (err, db) => {
-      if (err) {
-        console.log('Error connecting to db on update review request', err);
-      } else {
-        const db = db.db('leavereviews');*/
-        db.collection('reviews').updateOne({/*something with req*/}, (err, result) => {
-          if (err) {
-            res.status(400).send({});
-            console.log('Error updating Review');
-          } else {
-            res.status(200).send({});
-            console.log('Review successfully updated');
-          }
-        })
-      /*}
-    })*/
+  delete: (req, res) => {
+    db().collection('reviews').deleteOne({_id: req.body.id})
+      .then(data => {
+        db().collection('photos').deleteMany({review_id: req.body.id})
+          .then(data => {
+            res.status(200).send('Data has been deleted');
+          })
+          .catch(err => {
+            console.log('Err in review delete: ', err);
+            res.status(401).send('ERROR');
+          })
+      })
+      .catch(err => {
+        console.log('Err in review delete: ', err);
+        res.status(401).send('ERROR');
+      })
   },
-  
-  delete: function(req, res) {
-    /*MongoClient.connect(url, (err, db) => {
-      if (err) {
-        console.log('Error connecting to db on delete review request', err);
-      } else {
-        const db = db.db('leavereviews');*/
-        db.collection('reviews').deleteOne({/*something with req*/}, (err, result) => {
-          if (err) {
-            res.status(400).send({});
-            console.log('Error deleting Review');
-          } else {
-            res.status(200).send({});
-            console.log('Review successfully deleted');
-          }
-        })
-      /*}
-    })*/
+  put: (req, res) => {
+    PUT('reviews', req, res);
   }
 }
 

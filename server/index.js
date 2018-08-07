@@ -7,8 +7,8 @@ const cors = require('cors');
 
 const PORT = 3000;
 const App = express();
-require('../database/postgreSQL/index.js');
-//require('../database/mongo/index.js');
+//require('../database/postgreSQL/index.js');
+require('../database/mongo/index.js');
 const {router} = require('./router');
 
 

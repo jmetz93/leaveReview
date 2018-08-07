@@ -2,6 +2,7 @@ const { client } = require('../../../database/postgreSQL/index.js');
 
 const user_controllers = {
   get: function(req, res) {
+    console.log('req.query= ', req.query)
     client.query(`SELECT * FROM users WHERE id = ($1)` , [req.query.user_id], (err, data) => {
       if (err) {
         res.status(400);
@@ -50,7 +51,8 @@ const user_controllers = {
 
 const photo_controllers = {
   get: function(req, res) {
-    client.query(`SELECT * FROM photos WHERE review_id = ($1)`, [req.query.review_id], (err, data) => {
+    
+    client.query(`SELECT * FROM photos WHERE review_id = ($1)`, [req.query.id], (err, data) => {
       if (err) {
         res.status(400);
         // console.log('Error getting photos= ', err);
@@ -97,9 +99,8 @@ const photo_controllers = {
 
 const restaurant_controllers = {
   get: function(req, res) {
-    console.log('Request for ', req.headers.id)
-    console.log('Type: ', typeof req.headers.id)
-    client.query(`SELECT * FROM restaurants WHERE id = ($1)`, [req.headers.id], (err, data) => {
+    console.log('req.query= ', req.query)
+    client.query(`SELECT * FROM restaurants WHERE id = ($1)`, [req.query.id], (err, data) => {
       if (err) {
         res.status(400);
         // console.log('Error getting restaurants= ', err);
@@ -145,9 +146,7 @@ const restaurant_controllers = {
 
 const review_controllers = {
   get: function(req, res) {
-    console.log('review headers', req.query)
-    console.log('Reviews for ', req.query.restaurant_id);
-    console.log('Type of request: ', typeof req.query.restaurant_id);
+    console.log('req.query= ', req.query)
     client.query(`SELECT * FROM reviews WHERE restaurant_id = ($1)`, [req.query.restaurant_id], (err, data) => {
       if (err) {
         // console.log('Error getting reviews= ', err);

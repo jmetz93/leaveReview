@@ -1,48 +1,34 @@
-const MongoClient = require('mongodb');
+const mongo = require('mongodb').MongoClient;
+const { user_seeds } = require('../seeds.js');
+const { photo_seeds } = require('../seeds.js');
+const { restaurant_seeds } = require('../seeds.js');
+const { review_seeds } = require('../seeds.js');
 
-let db = null;
+const url = process.env.MONGO_URL || 'mongodb://127.0.0.1:27017/yelp';
 
-MongoClient.connect('mongodb://localhost:27017/', {
-  poolSize: 5
-}, (err, client) => {
-  if (err) {
-    console.log('Error making connection to db', err);
-  } else {
-    console.log('Succesfully connected to db');
-    db = client.db('leavereviews');
-    
-    db.createCollection('users',(err, res) => {
-      if (err) {
-        console.log('Error creating Users collection', err);
-      } else {
-        console.log('Success creating Users collection');
-      }
-    });
-
-    db.createCollection('restaurants', {autoIndexId: true}, (err, res) => {
-      if (err) {
-        console.log('Error creating Restaurants collection', err);
-      } else {
-        console.log('Success creating Restaurants collection')
-      }
-    });
-
-    db.createCollection('reviews', {autoIndexId: true}, (err, res) => {
-      if (err) {
-        console.log('Error creating Reviews collection', err);
-      } else {
-        console.log('Success creating Reviews collection')
-      }
-    });
-
-    db.createCollection('photos', {autoIndexId: true}, (err, res) => {
-      if (err) {
-        console.log('Error creating Photos collection', err);
-      } else {
-        console.log('Success creating Photos collection');
-      }
-    });
+let _db;
+let lastIndex = 0;
+const connection = mongo.connect(url, (err, client) => {
+  if(err) console.log('Err connection to MongoDB: ', err);
+  else {
+    console.log('Successfully connected to MONGODB');
+    _db = client.db();
+    db().collection('users').find({}).sort({_id: -1}).limit(1).toArray()
+      .then(data => {
+        lastIndex = data[0]._id;
+      })
+      .catch(err => {
+        console.log('err in USERS POST: ', err);
+      })
   }
-})
+});
 
-module.exports = { db }
+const db = () => _db;
+const returnLast = () => lastIndex;
+const increment = () => ++lastIndex;
+
+module.exports = {
+  db,
+  returnLast,
+  increment
+}
